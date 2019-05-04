@@ -6,12 +6,7 @@ class RedditSpider(scrapy.Spider):
     name = "reddit"
 
     def start_requests(self):
-        with open("spiders/subreddits.txt") as f:
-            read_data = f.read()
-            print(read_data)
-        # files = [f for f in os.listdir('.') if os.path.isfile(f)]
-        # for f in files:
-        #     print(f)
+        print(self.parse_subreddits())
         urls = [
             'https://www.reddit.com',
         ]
@@ -19,7 +14,8 @@ class RedditSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
-        print("printing response.body")
+        print("Parsing below--------------------------------------------------------------------")
+        print(response.css('title'))
         # print(response.body)
 
         # page = response.url.split("/")[-2]
@@ -27,3 +23,8 @@ class RedditSpider(scrapy.Spider):
         # with open(filename, 'wb') as f:
         #     f.write(response.body)
         # self.log('Saved file %s' % filename)
+    def parse_subreddits(self):
+        print("parsing subreddits---------------------------------------------------------------")
+        with open("spiders/subreddits.txt") as f:
+            x = f.read()
+            return x.split('\n')
