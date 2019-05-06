@@ -1,5 +1,6 @@
 import scrapy
 import os
+import pymongo
 
 
 class RedditSpider(scrapy.Spider):
@@ -20,7 +21,6 @@ class RedditSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
-        print("Parsing below--------------------------------------------------------------------")
 
         # which subreddit
         which_subreddit = response.url.split("/")[-1]
@@ -30,14 +30,8 @@ class RedditSpider(scrapy.Spider):
         # below is each post's content based on which subreddit
         # post title-----------------------------------------------------------------------------
         titles = response.css(".scrollerItem h2::text").getall()
-        print(len(titles))
-        print(titles)
-
         # posted by------------------------------------------------------------------------------
         posted_by = response.css("._2tbHP6ZydRpjI44J3syuqC::text").getall()
-        print(len(posted_by))
-        print(posted_by)
-
         # post upvotes---------------------------------------------------------------------------
         # initially they are all duplicated, ex: ['16k', '16k', '1k', '1k']
         # need to remove even or odd number position upvotes
@@ -46,14 +40,8 @@ class RedditSpider(scrapy.Spider):
         # removing duplicated
         new_upvotes = [upvote for index,
                        upvote in enumerate(upvotes) if index % 2 == 0]
-        print(len(new_upvotes))
-        print(new_upvotes)
-
         # comment_count--------------------------------------------------------------------------
         comment_count = response.css(".FHCV02u6Cp2zYL0fhQPsO::text").getall()
-        print(len(comment_count))
-        print(comment_count)
-
         # append post info into subreddit
         for index in range(len(titles)):
             temp_title = titles[index]
@@ -62,8 +50,27 @@ class RedditSpider(scrapy.Spider):
             temp_comment_count = comment_count[index]
             SubRedditInfo.addPost(
                 PostInfo(temp_title, temp_upvotes, temp_posted_by, temp_comment_count))
-        print("**************************************************************************************")
+        # now SubredditInfo holds all the information about current parse
+        # do something with it
         SubRedditInfo.printPost()
+
+        myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+
+        mydb = myclient["mydatabase"]
+
+        print(myclient.list_database_names())
+
+        dblist = myclient.list_database_names()
+        if "mydatabase" in dblist:
+            print("The database exists.")
+        mydb = myclient["mydatabase"]
+
+        mycol = mydb["customers"]
+
+        print(mydb.list_collection_names())
+        collist = mydb.list_collection_names()
+        if "customers" in collist:
+            print("The collection exists.")
 
     def parse_subreddits(self):
         # returns a list of subreddits
@@ -72,6 +79,9 @@ class RedditSpider(scrapy.Spider):
         with open("spiders/subreddits.txt") as f:
             x = f.read()
             return x.split('\n')
+
+    def save_to_db(self):
+        pass
 
 
 # holds the subreddit name and the post
@@ -85,17 +95,15 @@ class SubRedditsInfo:
 
     def printPost(self):
         for index in range(len(self.posts)):
-            print("--------------------------------")
+            print(
+                "-----------------------------------------------------------------------------------------")
             print(self.posts[index].title)
             print(self.posts[index].upvote)
             print(self.posts[index].posted_by)
             print(self.posts[index].comment_count)
-            print("--------------------------------")
 
 
 # holds each posts information
-
-
 class PostInfo:
     def __init__(self, title, upvote, posted_by, comment_count):
         self.title = title
