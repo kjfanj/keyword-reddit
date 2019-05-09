@@ -1,3 +1,6 @@
+import praw
+from dotenv import load_dotenv
+from pathlib import Path  # python3 only
 
 
 def get_subreddits(filename):
@@ -10,6 +13,8 @@ def main():
     # parse the subreddits file
     subreddits = get_subreddits('subreddits.txt')
     print(subreddits)
+    env_path = Path('.') / '.env'
+    load_dotenv(dotenv_path=env_path)
 
 
 if __name__ == "__main__":
