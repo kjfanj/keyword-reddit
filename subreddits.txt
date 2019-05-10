@@ -1,2 +1,2 @@
-space
-askreddit
+space,kw1,kw2
+askreddit,kw3,kw1

@@ -1,4 +1,4 @@
-# settings.py
+# Where the api key lives, letting other files to import.
 import os
 from pathlib import Path  # python3 only
 from dotenv import load_dotenv
