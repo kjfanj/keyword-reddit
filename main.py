@@ -1,6 +1,7 @@
 import praw
 from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT
 from datetime import datetime
+from SubredditKW import SubredditKW
 
 
 def get_lines(filename):
@@ -13,18 +14,13 @@ def get_keywoards(lines):
     subreddit_kw = []
     for line in lines:
         split_line = line.split(',')
-        # position 0 holds sub reddit
+        # position 0 holds subreddit
         cur_subreddit = split_line[0]
         # position >=1 holds all the keywords
         cur_keywords = split_line[1:]
+        # append the SubredditKW object with all the info above
         subreddit_kw.append(SubredditKW(cur_subreddit, cur_keywords))
     return subreddit_kw
-
-
-class SubredditKW:
-    def __init__(self, subreddit, keywords):
-        self.subreddit = subreddit
-        self.keywords = keywords
 
 
 def main():
