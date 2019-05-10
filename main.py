@@ -1,6 +1,5 @@
 import praw
-from dotenv import load_dotenv
-from pathlib import Path  # python3 only
+from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT
 
 
 def get_subreddits(filename):
@@ -12,9 +11,14 @@ def get_subreddits(filename):
 def main():
     # parse the subreddits file
     subreddits = get_subreddits('subreddits.txt')
-    print(subreddits)
-    env_path = Path('.') / '.env'
-    load_dotenv(dotenv_path=env_path)
+
+    reddit = praw.Reddit(client_id=CLIENT_ID,
+                         client_secret=CLIENT_SECRET,
+                         user_agent=USER_AGENT)
+    print(reddit.read_only)  # Output: True
+
+    for submission in reddit.subreddit('learnpython').hot(limit=10):
+        print(submission.title)
 
 
 if __name__ == "__main__":
