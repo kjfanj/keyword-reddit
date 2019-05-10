@@ -15,10 +15,22 @@ def main():
     reddit = praw.Reddit(client_id=CLIENT_ID,
                          client_secret=CLIENT_SECRET,
                          user_agent=USER_AGENT)
-    print(reddit.read_only)  # Output: True
 
-    for submission in reddit.subreddit('learnpython').hot(limit=10):
+    for submission in reddit.subreddit('space').hot(limit=3):
         print(submission.title)
+        print(submission.score)
+        print(submission.author)
+        print("comments...?")
+        for comment in submission.comments:
+            print("----------------------------------")
+            print(comment.author)
+            print(comment.created_utc)
+            print(comment.score)
+            print(comment.body)
+        print(submission.name)
+        print(submission.num_comments)
+        print(submission.upvote_ratio)
+        print('\n')
 
 
 if __name__ == "__main__":
