@@ -1,5 +1,6 @@
 import praw
 from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT
+from datetime import datetime
 
 
 def get_subreddits(filename):
@@ -18,18 +19,20 @@ def main():
 
     for submission in reddit.subreddit('space').hot(limit=3):
         print(submission.title)
-        print(submission.score)
-        print(submission.author)
-        print("comments...?")
-        for comment in submission.comments:
-            print("----------------------------------")
-            print(comment.author)
-            print(comment.created_utc)
-            print(comment.score)
-            print(comment.body)
-        print(submission.name)
-        print(submission.num_comments)
-        print(submission.upvote_ratio)
+        print("Upvotes:", submission.score)
+        print("by:", submission.author)
+        print("name:", submission.name)
+        print("num comment:", submission.num_comments)
+        print("upvote ratio:", submission.upvote_ratio)
+        # print("comments**************************")
+        # for comment in submission.comments:
+        #     print("----------------------------------")
+        #     print("user: ", comment.author)
+        #     ts = int(comment.created_utc)
+        #     print("at: ", datetime.utcfromtimestamp(
+        #         ts).strftime('%Y-%m-%d %H:%M:%S'))
+        #     print("score: ", comment.score)
+        #     print(comment.body)
         print('\n')
 
 
