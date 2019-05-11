@@ -4,6 +4,8 @@ from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT
 from datetime import datetime
 # class def
 from SubredditKW import SubredditKW
+import schedule
+import time
 
 
 def get_lines(filename):
@@ -26,7 +28,6 @@ def get_subreddit_kws(lines):
         cur_subreddit = split_line[0]
         # position >=1 holds all the keywords
         cur_keywords = split_line[1:]
-        # append the SubredditKW object with all the info above
         subreddit_kw.append(SubredditKW(cur_subreddit, cur_keywords))
     return subreddit_kw
 
@@ -39,21 +40,21 @@ def main():
         print(subreddit_kw.subreddit)
         print(subreddit_kw.keywords)
 
-    reddit = praw.Reddit(client_id=CLIENT_ID,
-                         client_secret=CLIENT_SECRET,
-                         user_agent=USER_AGENT)
+    # reddit = praw.Reddit(client_id=CLIENT_ID,
+    #                      client_secret=CLIENT_SECRET,
+    #                      user_agent=USER_AGENT)
 
-    for submission in reddit.subreddit('space').hot(limit=3):
-        print("Title:", submission.title)
-        print("self text:")
-        print("-------------------------------------------------------------")
-        print(submission.selftext)
-        print("-------------------------------------------------------------")
-        print("Upvotes:", submission.score)
-        print("By:", submission.author)
-        print("Num comment:", submission.num_comments)
-        print("Upvote ratio:", submission.upvote_ratio)
-        print("")
+    # for submission in reddit.subreddit('space').hot(limit=3):
+    #     print("Title:", submission.title)
+    #     print("self text:")
+    #     print("-------------------------------------------------------------")
+    #     print(submission.selftext)
+    #     print("-------------------------------------------------------------")
+    #     print("Upvotes:", submission.score)
+    #     print("By:", submission.author)
+    #     print("Num comment:", submission.num_comments)
+    #     print("Upvote ratio:", submission.upvote_ratio)
+    #     print("")
 
     # comment example here
     # print("comments**************************")
@@ -67,5 +68,12 @@ def main():
     #     print(comment.body)
 
 
-if __name__ == "__main__":
-    main()
+schedule.every(1).seconds.do(main)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+
+# if __name__ == "__main__":
+#     main()
