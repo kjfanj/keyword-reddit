@@ -4,8 +4,6 @@ from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT
 from datetime import datetime
 # class def
 from SubredditKW import SubredditKW
-import schedule
-import time
 
 
 def get_lines(filename):
@@ -66,13 +64,6 @@ def main():
     #         ts).strftime('%Y-%m-%d %H:%M:%S'))
     #     print("score:", comment.score)
     #     print(comment.body)
-
-
-schedule.every(1).seconds.do(main)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
 
 
 # if __name__ == "__main__":
