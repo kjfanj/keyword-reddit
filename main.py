@@ -38,9 +38,9 @@ def main():
         print(subreddit_kw.subreddit)
         print(subreddit_kw.keywords)
 
-    # reddit = praw.Reddit(client_id=CLIENT_ID,
-    #                      client_secret=CLIENT_SECRET,
-    #                      user_agent=USER_AGENT)
+    reddit = praw.Reddit(client_id=CLIENT_ID,
+                         client_secret=CLIENT_SECRET,
+                         user_agent=USER_AGENT)
 
     # for submission in reddit.subreddit('space').hot(limit=3):
     #     print("Title:", submission.title)
@@ -64,7 +64,3 @@ def main():
     #         ts).strftime('%Y-%m-%d %H:%M:%S'))
     #     print("score:", comment.score)
     #     print(comment.body)
-
-
-# if __name__ == "__main__":
-#     main()
