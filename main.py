@@ -1,9 +1,16 @@
 import praw
 # keys for praw
-from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT
+from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT, MONGO_URI
 from datetime import datetime
 # class def
 from SubredditKW import SubredditKW
+
+# from pymongo import MongoClient
+# # pprint library is used to make the output look more pretty
+# from pprint import pprint
+
+import pymongo
+import sys
 
 
 def get_lines(filename):
@@ -34,13 +41,28 @@ def main():
     lines = get_lines('subreddits.txt')
     subreddit_kws = get_subreddit_kws(lines)
 
+    # connect to MongoDB, change the << MONGODB URL >> to reflect your own connection string
+    # client = MongoClient(MONGO_URI)
+
+    # db = client.admin
+    # # Issue the serverStatus command and print the results
+    # serverStatusResult = db.command("serverStatus")
+    # pprint(serverStatusResult)
+    # print(MONGO_URI)
+
+    # Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
+    client = pymongo.MongoClient(MONGO_URI)
+
+    # Specify the database to be used
+    db = client.test
+
     for subreddit_kw in subreddit_kws:
         print(subreddit_kw.subreddit)
         print(subreddit_kw.keywords)
 
-    reddit = praw.Reddit(client_id=CLIENT_ID,
-                         client_secret=CLIENT_SECRET,
-                         user_agent=USER_AGENT)
+    #     reddit = praw.Reddit(client_id=CLIENT_ID,
+    #                          client_secret=CLIENT_SECRET,
+    #                          user_agent=USER_AGENT)
 
     # for submission in reddit.subreddit('space').hot(limit=3):
     #     print("Title:", submission.title)
@@ -64,3 +86,7 @@ def main():
     #         ts).strftime('%Y-%m-%d %H:%M:%S'))
     #     print("score:", comment.score)
     #     print(comment.body)
+
+
+if __name__ == "__main__":
+    main()
