@@ -33,6 +33,9 @@ def get_subreddit_kws(lines):
 
 
 def send_email(kw, subreddit, url, title):
+    """
+    take in the keyword found from {some subreddit}, and send the url and title to yourself
+    """
     # message formatting
     SUBJECT = "Keyword: \"{}\" found from Subreddit: {}".format(kw, subreddit)
     msg = "Title: \"{}\"\n {}".format(title, url)
@@ -52,10 +55,17 @@ def send_email(kw, subreddit, url, title):
 
 
 def look_up_loop():
+    """
+    main looping for new searches
+    first parse,
+    then connect praw,
+    then start new search on all subreddit,
+    then check if kw exist in title, if found send email
+    """
+    # parsing
     lines = get_lines('subreddits.txt')
     subreddit_kws = get_subreddit_kws(lines)
-
-    print("NEW SEARCH-----------------------------------------------------------")
+    # connecting praw
     reddit = praw.Reddit(client_id=CLIENT_ID,
                          client_secret=CLIENT_SECRET,
                          user_agent=USER_AGENT)
