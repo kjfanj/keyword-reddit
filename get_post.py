@@ -63,14 +63,10 @@ def look_up_loop():
     for subreddit_kw in subreddit_kws:
         # loop through the submission of the subreddit based on the new method
         for submission in reddit.subreddit(subreddit_kw.subreddit).hot(limit=10):
-            # print("  Post {}".format(index))
-            # index += 1
             # loop through the keywords in SubredditKW object then find matching
             for kw in subreddit_kw.keywords:
-                # print("    KW: {}".format(kw))
                 # if found then send the email to myself
                 if kw in submission.title:
-                    print("      {} found in {}! sending email.".format(
-                        kw, subreddit_kw.subreddit))
+                    # kw found! sending email
                     send_email(kw, subreddit_kw.subreddit,
                                submission.url, submission.title)
