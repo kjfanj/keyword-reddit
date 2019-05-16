@@ -31,7 +31,7 @@ def get_subreddit_kws(lines):
     return subreddit_kw
 
 
-def send_email():
+def send_email(kw, subreddit, url):
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login(MY_GMAIL, APP_PW)
     # send from my gmail to gmail
@@ -55,9 +55,15 @@ def look_up_loop():
                          client_secret=CLIENT_SECRET,
                          user_agent=USER_AGENT)
 
-    for submission in reddit.subreddit('testabot').new(limit=10):
-        if("hello there" in submission.title):
-            print("post found")
+    for subreddit_kw in subreddit_kws:
+        for submission in reddit.subreddit(subreddit_kw.subreddit).new(limit=10):
+            for kw in subreddit_kw.keywords:
+                if kw in submission.title:
+                    send_email(kw, subreddit_kw.subreddit, submission.url)
+
+    # for submission in reddit.subreddit('testabot').new(limit=10):
+    #     if("hello there" in submission.title):
+    #         print("post found")
         # print("Title:", submission.title)
         # print("self text:")
         # print("-------------------------------------------------------------")
