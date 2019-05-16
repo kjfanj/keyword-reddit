@@ -6,6 +6,7 @@ from datetime import datetime
 from SubredditKW import SubredditKW
 import smtplib
 from email.mime.text import MIMEText
+from Posts import Posts
 
 
 def get_lines(filename):
@@ -19,6 +20,7 @@ def get_lines(filename):
 
 def get_subreddit_kws(lines):
     """
+    param
     return a list of SubredditKW after parsing
     """
     subreddit_kw = []
@@ -37,10 +39,11 @@ def send_email(kw, subreddit, url, title):
     take in the keyword found from {some subreddit}, and send the url and title to yourself
     """
     # message formatting
-    SUBJECT = "Keyword: \"{}\" found from Subreddit: {}".format(kw, subreddit)
+    SUBJECT = "Keyword: \"{}\" found from Subreddit: {}".format(
+        kw, subreddit)
     msg = "Title: \"{}\"\n {}".format(title, url)
-    TO = MY_GMAIL
     FROM = MY_GMAIL
+    TO = MY_GMAIL
 
     msg = MIMEText(msg)
     msg['Subject'] = SUBJECT
@@ -62,6 +65,9 @@ def look_up_loop():
     then start new search on all subreddit,
     then check if kw exist in title, if found send email
     """
+
+    sent_posts = Posts()
+    print("new search coming through.")
     # parsing
     lines = get_lines('subreddits.txt')
     subreddit_kws = get_subreddit_kws(lines)
@@ -71,12 +77,16 @@ def look_up_loop():
                          user_agent=USER_AGENT)
     # loop through all the SubredditKW object
     for subreddit_kw in subreddit_kws:
-        # loop through the submission of the subreddit based on the new method
-        for submission in reddit.subreddit(subreddit_kw.subreddit).hot(limit=10):
+        # loop through the submission of the subreddit based on the new(limit=10) method
+        for submission in reddit.subreddit(subreddit_kw.subreddit).new(limit=10):
             # loop through the keywords in SubredditKW object then find matching
             for kw in subreddit_kw.keywords:
-                # if found then send the email to myself
-                if kw in submission.title:
+                # if kw found and doesnt exist in sent_posts then send the email to myself
+                if kw in submission.title and not sent_posts.check_if_id_exists(submission.id):
+                    print("{} found from {}".format(
+                        kw, subreddit_kw.subreddit))
                     # kw found! sending email
                     send_email(kw, subreddit_kw.subreddit,
                                submission.url, submission.title)
+                    # and add it to sent_posts so no emailing for repetitive submission
+                    sent_posts.add_post(submission.id)

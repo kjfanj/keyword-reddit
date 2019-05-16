@@ -1,3 +1,3 @@
 space,kw1,kw2
 askreddit,kw3,kw1
-testabot,special title,lol
+testabot,special title,wow
