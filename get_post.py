@@ -1,9 +1,10 @@
 import praw
 # keys for praw
-from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT, MONGO_URI
+from settings import CLIENT_SECRET, CLIENT_ID, USER_AGENT, MONGO_URI, APP_PW, MY_GMAIL
 from datetime import datetime
 # class def
 from SubredditKW import SubredditKW
+import smtplib
 
 
 def get_lines(filename):
@@ -30,6 +31,17 @@ def get_subreddit_kws(lines):
     return subreddit_kw
 
 
+def send_email():
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login(MY_GMAIL, APP_PW)
+    # send from my gmail to gmail
+    server.sendmail(
+        MY_GMAIL,
+        MY_GMAIL,
+        "testing message 123")
+    server.quit()
+
+
 def look_up_loop():
     lines = get_lines('subreddits.txt')
     subreddit_kws = get_subreddit_kws(lines)
@@ -42,12 +54,10 @@ def look_up_loop():
     reddit = praw.Reddit(client_id=CLIENT_ID,
                          client_secret=CLIENT_SECRET,
                          user_agent=USER_AGENT)
-    # lol = []
+
     for submission in reddit.subreddit('testabot').new(limit=10):
         if("hello there" in submission.title):
             print("post found")
-        # kw_col.insert_one(submission)
-        # lol.append(submission)
         # print("Title:", submission.title)
         # print("self text:")
         # print("-------------------------------------------------------------")
@@ -59,16 +69,6 @@ def look_up_loop():
         # print("Upvote ratio:", submission.upvote_ratio)
         # print("")
 
-    # x = kw_col.find_one(lol[0])
-
-    # Print the result to the screen
-    # print(x)
-
-    # Close the connection
-    # client.close()
-    # for lolol in lol:
-    #     print(lolol.is_self)
-    # print(len(lol))
     # comment example here
     # print("comments**************************")
     # for comment in submission.comments:
