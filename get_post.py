@@ -5,6 +5,7 @@ from datetime import datetime
 # class def
 from SubredditKW import SubredditKW
 import smtplib
+from email.mime.text import MIMEText
 
 
 def get_lines(filename):
@@ -31,14 +32,22 @@ def get_subreddit_kws(lines):
     return subreddit_kw
 
 
-def send_email(kw, subreddit, url):
+def send_email(kw, subreddit, url, title):
+    # message formatting
+    SUBJECT = "Keyword: \"{}\" found from Subreddit: {}".format(kw, subreddit)
+    msg = "Title: \"{}\"\n {}".format(title, url)
+    TO = MY_GMAIL
+    FROM = MY_GMAIL
+
+    msg = MIMEText(msg)
+    msg['Subject'] = SUBJECT
+    msg['To'] = TO
+    msg['From'] = FROM
+
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login(MY_GMAIL, APP_PW)
-    # send from my gmail to gmail
-    server.sendmail(
-        MY_GMAIL,
-        MY_GMAIL,
-        "testing message 123")
+    # send from my gmail to my gmail
+    server.sendmail(FROM, TO, msg.as_string())
     server.quit()
 
 
@@ -46,45 +55,22 @@ def look_up_loop():
     lines = get_lines('subreddits.txt')
     subreddit_kws = get_subreddit_kws(lines)
 
-    # for subreddit_kw in subreddit_kws:
-    #     print(subreddit_kw.subreddit)
-    #     print(subreddit_kw.keywords)
-
-    print("new search")
+    print("NEW SEARCH-----------------------------------------------------------")
     reddit = praw.Reddit(client_id=CLIENT_ID,
                          client_secret=CLIENT_SECRET,
                          user_agent=USER_AGENT)
-
+    # loop through all the SubredditKW object
     for subreddit_kw in subreddit_kws:
-        for submission in reddit.subreddit(subreddit_kw.subreddit).new(limit=10):
+        # loop through the submission of the subreddit based on the new method
+        for submission in reddit.subreddit(subreddit_kw.subreddit).hot(limit=10):
+            # print("  Post {}".format(index))
+            # index += 1
+            # loop through the keywords in SubredditKW object then find matching
             for kw in subreddit_kw.keywords:
+                # print("    KW: {}".format(kw))
+                # if found then send the email to myself
                 if kw in submission.title:
-                    send_email(kw, subreddit_kw.subreddit, submission.url)
-
-    # for submission in reddit.subreddit('testabot').new(limit=10):
-    #     if("hello there" in submission.title):
-    #         print("post found")
-        # print("Title:", submission.title)
-        # print("self text:")
-        # print("-------------------------------------------------------------")
-        # print(submission.selftext)
-        # print("-------------------------------------------------------------")
-        # print("Upvotes:", submission.score)
-        # print("By:", submission.author)
-        # print("Num comment:", submission.num_comments)
-        # print("Upvote ratio:", submission.upvote_ratio)
-        # print("")
-
-    # comment example here
-    # print("comments**************************")
-    # for comment in submission.comments:
-    #     print("----------------------------------")
-    #     print("user:", comment.author)
-    #     ts = int(comment.created_utc)
-    #     print("at:", datetime.utcfromtimestamp(
-    #         ts).strftime('%Y-%m-%d %H:%M:%S'))
-    #     print("score:", comment.score)
-    #     print(comment.body)
-
-
-look_up_loop()
+                    print("      {} found in {}! sending email.".format(
+                        kw, subreddit_kw.subreddit))
+                    send_email(kw, subreddit_kw.subreddit,
+                               submission.url, submission.title)
