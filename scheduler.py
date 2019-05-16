@@ -1,7 +1,6 @@
 import schedule
 import time
 from get_post import look_up_loop
-# from Posts import Posts
 
 
 def main():

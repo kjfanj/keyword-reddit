@@ -34,22 +34,21 @@ def get_subreddit_kws(lines):
     return subreddit_kw
 
 
-def send_email(kw, subreddit, url, title):
+def send_email(kw, subreddit, url, title, total):
     """
     take in the keyword found from {some subreddit}, and send the url and title to yourself
     """
     # message formatting
     SUBJECT = "Keyword: \"{}\" found from Subreddit: {}".format(
         kw, subreddit)
-    msg = "Title: \"{}\"\n {}".format(title, url)
+    msg = "Title: \"{}\"\n {}\n\n\nTotal sent: {}".format(title, url, total)
     FROM = MY_GMAIL
     TO = MY_GMAIL
-
     msg = MIMEText(msg)
     msg['Subject'] = SUBJECT
     msg['To'] = TO
     msg['From'] = FROM
-
+    # login and send email
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login(MY_GMAIL, APP_PW)
     # send from my gmail to my gmail
@@ -59,13 +58,13 @@ def send_email(kw, subreddit, url, title):
 
 def look_up_loop():
     """
-    main looping for new searches
+    looping for new searches
     first parse,
     then connect praw,
     then start new search on all subreddit,
     then check if kw exist in title, if found send email
     """
-
+    # sent_posts used for Post's class variable to avoid sending sent posts
     sent_posts = Posts()
     print("new search coming through.")
     # parsing
@@ -83,10 +82,10 @@ def look_up_loop():
             for kw in subreddit_kw.keywords:
                 # if kw found and doesnt exist in sent_posts then send the email to myself
                 if kw in submission.title and not sent_posts.check_if_id_exists(submission.id):
-                    print("{} found from {}".format(
+                    print("{} found from {}, sending email".format(
                         kw, subreddit_kw.subreddit))
                     # kw found! sending email
                     send_email(kw, subreddit_kw.subreddit,
-                               submission.url, submission.title)
+                               submission.url, submission.title, len(sent_posts.ids) + 1)
                     # and add it to sent_posts so no emailing for repetitive submission
                     sent_posts.add_post(submission.id)
