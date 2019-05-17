@@ -104,6 +104,7 @@ def look_up_loop():
     for subreddit_kw in subreddit_kws:
         # check if subreddit specified in the file exists
         if subreddit_exists(subreddit_kw.subreddit, reddit):
+            # printing out the subreddit and keyword we are looking for
             print(" * r/{}".format(subreddit_kw.subreddit))
             print(subreddit_kw.keywords)
             # loop through the submission of the subreddit based on the new(limit=10) method
@@ -122,6 +123,7 @@ def look_up_loop():
                                    submission.created_utc, submission.author, submission.is_self)
                         # and add it to sent_posts so no emailing for repetitive submission
                         sent_posts.add_post(submission.id)
+        # subreddit does not exist, inform the user to check subreddits.txt again
         else:
-            print("\n - r/{} does not exist, please check again\n".format(
+            print("\n - r/{} does not exist, please check subreddits.txt again\n".format(
                 subreddit_kw.subreddit))
