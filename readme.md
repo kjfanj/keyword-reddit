@@ -4,8 +4,6 @@ Get the reddit post sent to your email based on the keywords you want for each s
 
 ## Getting Started
 
-Below is the instructions you need to get the program running.
-
 ### Prerequisites
 
 Make sure you have python3 and pip installed. 
@@ -17,18 +15,18 @@ Would highly recommend using virtual environment to run this program to guarante
 
 After you clone the project, cd into the project directory.
 
-Create a virtual environment in kw_reddit directory.
+Create a virtual environment in directory.
 ```
-$ python -m venv virtuaEnvNameYouWant
+$ python -m venv virtualEnvNameYouWant
 ```
 
-To activate the virtual environment in kw_reddit directory.
+To activate the virtual environment in directory.
 ```
 $ venvnameyouwant\Scripts\activate.bat
 ```
-When you see (virtuaEnvNameYouWant) show up to the left of each command line, you know you are in the virtual environment now.
+When you see (virtualEnvNameYouWant) show up to the left of each command line, you know you are in the virtual environment now.
 
-Then you can install the packages specified in the requirements.txt file
+Then you can install the packages specified in the requirements.txt file into the virtual environment.
 
 ```
 $ pip install -r requirements.txt 
@@ -49,6 +47,7 @@ USER_AGENT=PRAW recommended format: <platform>:<app ID>:<version string> (by /u/
 MY_GMAIL=XXXXXXXXX@gmail.com (the gmail account you used to create the APP_PW)
 APP_PW=XXXXXXXXXXXXXXXX (You get this from Google's App passwords after turning on 2-step verification)
 ```
+More specifics in the images folder.
 
 ## Running the program
 Edit the subreddits.txt to specify the keywords you want to see in the title or selfpost.
@@ -62,9 +61,12 @@ subreddit2,kw1,kw2
 Ex:
 
 ```
-
+space,nasa,telescope
+pics,moment
+doesnotexistthissubreddit,keyword1
+askreddit,fun,funny
 ```
-
+![example](/images/example.png)
 
 https://www.reddit.com/prefs/apps
 
