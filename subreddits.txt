@@ -2,3 +2,4 @@ space,nasa,telescope
 pics,moment
 doesnotexistthissubreddit,keyword1
 askreddit,parent,parents
+testabot,second

@@ -111,7 +111,7 @@ def look_up_loop():
                 # loop through the keywords in SubredditKW object then find matching
                 for kw in subreddit_kw.keywords:
                     # if kw found and doesnt exist in sent_posts then send the email to myself
-                    if not sent_posts.check_if_id_exists(submission.id) and kw.lower() in submission.title.lower():
+                    if not sent_posts.check_if_id_exists(submission.id) and (kw.lower() in submission.title.lower() or kw.lower() in submission.selftext.lower()):
                         print(" ********** \"{}\" found from {}, sending email".format(
                             kw, subreddit_kw.subreddit))
                         # kw found! sending email
