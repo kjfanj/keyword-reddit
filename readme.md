@@ -66,7 +66,14 @@ pics,moment
 doesnotexistthissubreddit,keyword1
 askreddit,fun,funny
 ```
+Will produce.
+
 ![example](/images/example.png)
+
+And also send the post to your gmail.
+
+![result](/images/result.png)
+
 
 https://www.reddit.com/prefs/apps
 
