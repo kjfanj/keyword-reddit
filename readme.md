@@ -32,13 +32,21 @@ Then you can install the packages specified in the requirements.txt file into th
 $ pip install -r requirements.txt 
 ```
 
+to deactivate the virtual environment
+
+```
+$ deactivate
+```
+
+If you want to remove the virtual environment, just delete the venvnameyouwant folder.
+
 ### Authentications
 
 You will need a reddit account for PRAW and a gmail account for sending emails to yourself for this program.
 
-create a .env file in the kw_reddit directory.
+Create a .env file in the kw_reddit directory.
 
-copy the .env.sample to the .env file and fill out the required informations.
+Copy the .env.sample to the .env file and fill out the required informations.
 
 ```
 CLIENT_ID=XXXXX-XXXXXXXX (You need to register for an app after signing in on reddit)
@@ -50,16 +58,16 @@ APP_PW=XXXXXXXXXXXXXXXX (You get this from Google's App passwords after turning 
 
 You can go to the reddit developer console [here](https://www.reddit.com/prefs/apps) after logging in to create an app.
 
-For sending email you will need to go to the [security tab](https://myaccount.google.com/security) in your account setting after logging in, and you will first allow 2-step verification, then create an app password, which is what you will put in the .env file.
+For sending email you will need to go to the [security tab](https://myaccount.google.com/security) in your gmail account setting after logging in, and you will first allow 2-step verification, then create an app password, which is what you will put in the .env file.
 
 More specifics in the images folder.
 
 ## Running the program
 Edit the subreddits.txt to specify the keywords you want to see in the title or selfpost.
 
-Formatted as below.
+Formatted as below, no space in between.
 
-subreddit1,kw1,kw2
+subreddit1,kw1,kw2 and kw3
 
 subreddit2,kw1,kw2
 
@@ -78,8 +86,6 @@ then run
 $ python scheduler.py
 ```
 
-### Demo
-
 ![example](/images/example.png)
 
 and also send the post to your gmail
@@ -87,5 +93,5 @@ and also send the post to your gmail
 ![result](/images/result.png)
 
 
-The default is making a call every 5 seconds, but you can try to tweak it in scheduler.py based on schedule library.
+The default is to make a call every 5 seconds, but you can try to tweak it in scheduler.py based on schedule library.
 
