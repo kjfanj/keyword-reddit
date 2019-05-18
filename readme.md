@@ -47,6 +47,11 @@ USER_AGENT=PRAW recommended format: <platform>:<app ID>:<version string> (by /u/
 MY_GMAIL=XXXXXXXXX@gmail.com (the gmail account you used to create the APP_PW)
 APP_PW=XXXXXXXXXXXXXXXX (You get this from Google's App passwords after turning on 2-step verification)
 ```
+
+You can go to the reddit developer console [here](https://www.reddit.com/prefs/apps) after logging in to create an app.
+
+For sending email you will need to go to the [security tab](https://myaccount.google.com/security) in your account setting after logging in, and you will first allow 2-step verification, then create an app password, which is what you will put in the .env file.
+
 More specifics in the images folder.
 
 ## Running the program
@@ -58,7 +63,7 @@ subreddit1,kw1,kw2
 
 subreddit2,kw1,kw2
 
-Ex:
+Ex: subreddits.txt
 
 ```
 space,nasa,telescope
@@ -66,16 +71,21 @@ pics,moment
 doesnotexistthissubreddit,keyword1
 askreddit,fun,funny
 ```
-Will produce.
+
+then run
+
+```
+$ python scheduler.py
+```
+
+### Demo
 
 ![example](/images/example.png)
 
-And also send the post to your gmail.
+and also send the post to your gmail
 
 ![result](/images/result.png)
 
 
-https://www.reddit.com/prefs/apps
-
-https://myaccount.google.com/security
+The default is making a call every 5 seconds, but you can try to tweak it in scheduler.py based on schedule library.
 
