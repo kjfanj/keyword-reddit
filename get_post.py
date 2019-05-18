@@ -96,8 +96,8 @@ def look_up_loop():
     reddit = praw.Reddit(client_id=CLIENT_ID,
                          client_secret=CLIENT_SECRET,
                          user_agent=USER_AGENT)
-
-    print("\nNew searches coming through. {}".format(
+    print("----------------------------------------------------")
+    print(" # New searches coming through. {}\n".format(
         datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
 
     # loop through all the SubredditKW object
@@ -105,15 +105,14 @@ def look_up_loop():
         # check if subreddit specified in the file exists
         if subreddit_exists(subreddit_kw.subreddit, reddit):
             # printing out the subreddit and keyword we are looking for
-            print(" * r/{}".format(subreddit_kw.subreddit))
-            print(subreddit_kw.keywords)
+            print(" * r/{} -- {}".format(subreddit_kw.subreddit, subreddit_kw.keywords))
             # loop through the submission of the subreddit based on the new(limit=10) method
-            for submission in reddit.subreddit(subreddit_kw.subreddit).hot(limit=10):
+            for submission in reddit.subreddit(subreddit_kw.subreddit).new(limit=10):
                 # loop through the keywords in SubredditKW object then find matching
                 for kw in subreddit_kw.keywords:
                     # if kw found and doesnt exist in sent_posts then send the email to myself
                     if not sent_posts.check_if_id_exists(submission.id) and kw.lower() in submission.title.lower():
-                        print("\"{}\" found from {}, sending email".format(
+                        print(" ********** \"{}\" found from {}, sending email".format(
                             kw, subreddit_kw.subreddit))
                         # kw found! sending email
                         send_email(kw, subreddit_kw.subreddit, submission.permalink,
@@ -125,5 +124,5 @@ def look_up_loop():
                         sent_posts.add_post(submission.id)
         # subreddit does not exist, inform the user to check subreddits.txt again
         else:
-            print("\n - r/{} does not exist, please check subreddits.txt again\n".format(
+            print(" - r/{} does not exist, please check subreddits.txt again".format(
                 subreddit_kw.subreddit))
