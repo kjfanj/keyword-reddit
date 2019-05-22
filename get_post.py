@@ -55,7 +55,7 @@ def send_email(kw, subreddit, reddit_permalink, url, title, total, body, created
     take in the keyword found from {some subreddit}, and send the url and title to yourself
     """
     # message formatting
-    formatted_time = datetime.utcfromtimestamp(
+    formatted_time = datetime.fromtimestamp(
         created_time).strftime('%Y-%m-%d %H:%M:%S')
     body_to_display = body if body else "No self posts"
     url_to_display = "" if is_self else url
